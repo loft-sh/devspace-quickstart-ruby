@@ -1,19 +1,27 @@
-FROM ruby
+FROM ruby:2.6.4
 
-RUN bundle config --global frozen 1
+# Install system dependencies
+RUN apt-get update \
+ && apt-get install -y apt-transport-https ca-certificates \
+ && curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
+ && echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list \
+ && apt-get update \
+ && apt-get install -y nodejs yarn postgresql-client
 
-WORKDIR /usr/src/app
+RUN mkdir /app
+WORKDIR /app
 
-# Copy gemfile into container
-COPY Gemfile Gemfile.lock ./
+# Copy Gemfile and Gemfile.lock to WORKDIR
+COPY Gemfile .
+COPY Gemfile.lock .
 
 # Install dependencies
 RUN bundle install
 
-# Copy application into container
+# Copy remaining source code files to WORKDIR
 COPY . .
 
-EXPOSE 8888
+EXPOSE 3000
 
-# Run application
-CMD ["ruby", "app.rb"]
+# Start rails server
+CMD ["rails", "server", "-b", "0.0.0.0"]
