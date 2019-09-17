@@ -8,6 +8,7 @@ RUN apt-get update \
  && apt-get update \
  && apt-get install -y nodejs yarn postgresql-client
 
+# Create project directory (workdir)
 RUN mkdir /app
 WORKDIR /app
 
