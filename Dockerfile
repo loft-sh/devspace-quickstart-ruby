@@ -16,7 +16,7 @@ COPY Gemfile .
 COPY Gemfile.lock .
 
 # Install dependencies
-RUN bundle install
+RUN bundle install && yarn install --check-files
 
 # Copy remaining source code files to WORKDIR
 COPY . .
@@ -24,4 +24,5 @@ COPY . .
 EXPOSE 3000
 
 # Start rails server
-CMD ["rails", "server", "-b", "0.0.0.0"]
+ENTRYPOINT ["bundle", "exec", "rails", "server", "-p", "3000", "-b", "0.0.0.0"]
+ 
