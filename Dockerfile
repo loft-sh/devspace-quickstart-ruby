@@ -3,6 +3,7 @@ FROM ruby:2.6.4-alpine
 RUN apk add --update --no-cache \
     build-base \
     postgresql-dev \
+    sqlite-dev \
     git \
     file \
     imagemagick \
@@ -15,9 +16,9 @@ RUN mkdir /app
 WORKDIR /app
 
 # Install gems
-ADD Gemfile* .
+COPY Gemfile* ./
 RUN bundle config --global frozen 1 \
- && bundle install test -j4 --retry 3
+ && bundle install -j4 --retry 3
 
 # Install yarn packages
 COPY package.json yarn.lock ./
