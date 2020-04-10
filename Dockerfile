@@ -12,7 +12,6 @@ RUN apk add --update --no-cache \
     tzdata
 
 # Create project directory (workdir)
-RUN mkdir /app
 WORKDIR /app
 
 # Install gems
